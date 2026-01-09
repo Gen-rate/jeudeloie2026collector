@@ -12,7 +12,7 @@ HTML
 
 <!DOCTYPE html>
 <html lang="fr">
-<head>
+<head><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta charset="UTF-8">
     <title>Gen-rate : Archive Master Gold</title>
     <style>
@@ -46,7 +46,14 @@ HTML
         #ui-group { position: absolute; bottom: 30px; right: 30px; display: flex; flex-direction: column; align-items: center; z-index: 1000; }
         #lancers-txt { background: #e67e22; color: white; padding: 10px 20px; border-radius: 10px; border: 2px solid #fff; margin-bottom: 12px; font-weight: bold; }
         #die { width: 75px; height: 75px; background: #fff; border-radius: 15px; border: 4px solid #333; display: flex; justify-content: center; align-items: center; color: #333; font-size: 32px; font-weight: bold; cursor: pointer; }
-    </style>
+   CSS
+
+@media (max-width: 1024px) {
+    #game-viewport, #game-container {
+        transform: scale(0.4); /* Réduit la taille pour mobile */
+        transform-origin: top left;
+    }
+} </style>
 </head>
 <body>
     <img src="#" id="carte-fond">
@@ -123,4 +130,5 @@ function moteurJeuDeLOie() {
 }
 
 // Lancement immédiat de la réparation
+
 moteurJeuDeLOie();</script>
