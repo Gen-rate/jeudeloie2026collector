@@ -2,10 +2,10 @@ HTML
 
 <script>
 /* --- 1. ZONE DE COLLAGE DU CHÂTEAU --- */
-const imageChateauBase64 = "COLLE_ICI_TON_CODE_CHATEAU_RECUPERE";
+const imageChateauBase64 = "TON_CODE_BASE64_DU_CHATEAU_LIGNE_6_ICI";
 
 /* --- 2. ZONE DE COLLAGE DU FOND --- */
-const imageFondBase64 = "COLLE_ICI_TON_CODE_FOND_RECUPERE";
+const imageFondBase64 = "TON_CODE_BASE64_DU_FOND_LIGNE_10_ICI";
 </script>
 
 <!DOCTYPE html>
@@ -20,7 +20,7 @@ const imageFondBase64 = "COLLE_ICI_TON_CODE_FOND_RECUPERE";
         #chateau-layer { position: absolute; width: 100%; height: 100%; background-size: contain; background-repeat: no-repeat; background-position: center; z-index: 2; pointer-events: none; }
         #path-svg { position: absolute; width: 100%; height: 100%; z-index: 3; pointer-events: none; }
         
-        /* FIX CARRÉ BLANC : Force la transparence absolue */
+        /* FIX CARRÉ BLANC : On force la transparence ici */
         #delorean-container { position: absolute; z-index: 500; transition: all 0.35s linear; width: 100px; height: 50px; transform: translate(-50%, -50%); background: transparent !important; border: none !important; }
         #delorean { width: 100%; height: 100%; background: url('joueur.png') no-repeat center/contain !important; background-color: transparent !important; filter: drop-shadow(0 8px 6px rgba(0,0,0,0.6)); }
 
@@ -42,6 +42,7 @@ const imageFondBase64 = "COLLE_ICI_TON_CODE_FOND_RECUPERE";
     </div>
 
 <script>
+// --- RÉTABLISSEMENT DU MOTEUR COMPLET ---
 let car = { index: 0, vitesse: 2, x: 0, y: 0 };
 let destination = 0;
 let valeurDe = 0;
@@ -70,11 +71,11 @@ function afficherPopup(indexPiste) {
     document.getElementById('popup-fin-tour').style.display = 'block';
 }
 
-// Chargement des images récupérées
+// Chargement des images
 document.getElementById('background-layer').style.backgroundImage = `url(${imageFondBase64})`;
 document.getElementById('chateau-layer').style.backgroundImage = `url(${imageChateauBase64})`;
 
 moteurJeuDeLoie();
 </script>
 </body>
-</html
+</html>
