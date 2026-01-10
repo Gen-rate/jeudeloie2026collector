@@ -2,10 +2,10 @@ HTML
 
 <script>
 /* --- 1. ZONE DE COLLAGE DU CHÂTEAU --- */
-const imageChateauBase64 = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAZAAAAAZ... (REMETS ICI TON LONG CODE DE PERDUUUUU.PNG LIGNE 6)";
+const imageChateauBase64 = "COLLE_ICI_TON_CODE_CHATEAU_RECUPERE";
 
 /* --- 2. ZONE DE COLLAGE DU FOND --- */
-const imageFondBase64 = "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/4QBoRXhpZ... (REMETS ICI TON LONG CODE DE PERDUUUUU.PNG LIGNE 10)";
+const imageFondBase64 = "COLLE_ICI_TON_CODE_FOND_RECUPERE";
 </script>
 
 <!DOCTYPE html>
@@ -20,7 +20,7 @@ const imageFondBase64 = "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/4QBo
         #chateau-layer { position: absolute; width: 100%; height: 100%; background-size: contain; background-repeat: no-repeat; background-position: center; z-index: 2; pointer-events: none; }
         #path-svg { position: absolute; width: 100%; height: 100%; z-index: 3; pointer-events: none; }
         
-        /* CORRECTIF CARRÉ BLANC */
+        /* FIX CARRÉ BLANC : Force la transparence absolue */
         #delorean-container { position: absolute; z-index: 500; transition: all 0.35s linear; width: 100px; height: 50px; transform: translate(-50%, -50%); background: transparent !important; border: none !important; }
         #delorean { width: 100%; height: 100%; background: url('joueur.png') no-repeat center/contain !important; background-color: transparent !important; filter: drop-shadow(0 8px 6px rgba(0,0,0,0.6)); }
 
@@ -42,7 +42,6 @@ const imageFondBase64 = "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/4QBo
     </div>
 
 <script>
-// --- RÉTABLISSEMENT DU MOTEUR ---
 let car = { index: 0, vitesse: 2, x: 0, y: 0 };
 let destination = 0;
 let valeurDe = 0;
@@ -51,7 +50,7 @@ function moteurJeuDeLoie() {
     destination = valeurDe * 150;
     if (car.index < destination) { car.index += car.vitesse; }
     
-    // CAPTEUR FIN DE TOUR
+    // CAPTEUR : Déclenche le message
     if (Math.abs(car.index - destination) < 15 && document.getElementById('popup-fin-tour').style.display === 'none' && destination > 0) {
         afficherPopup(car.index);
     }
@@ -71,10 +70,11 @@ function afficherPopup(indexPiste) {
     document.getElementById('popup-fin-tour').style.display = 'block';
 }
 
+// Chargement des images récupérées
 document.getElementById('background-layer').style.backgroundImage = `url(${imageFondBase64})`;
 document.getElementById('chateau-layer').style.backgroundImage = `url(${imageChateauBase64})`;
 
 moteurJeuDeLoie();
 </script>
 </body>
-</html>
+</html
