@@ -1,4 +1,4 @@
-HTML
+
 
 <script>
   /* --- 1. ZONE DE COLLAGE DU CHÂTEAU --- */
@@ -31,9 +31,8 @@ HTML
             display: flex; justify-content: center; align-items: center; font-size: 10px; transform-origin: center; z-index: 10;
             box-shadow: 0 1px 1px rgba(0,0,0,0.3);
         }
-        #delorean-container { position: absolute; z-index: 500; transition: all 0.35s linear; width: 100px; height: 50px; transform: translate(-50%, -50%); }
-        #delorean { width: 100%; height: 100%; background: url('joueur.png') no-repeat center/contain; filter: drop-shadow(0 8px 6px rgba(0,0,0,0.6)); }
-        #big-announcement {
+```css #delorean-container { position: absolute; z-index: 500; transition: all 0.35s linear; #delorean-container { position: absolute; z-index: 500; transition: all 0.35s linear; width: 100px; height: 50px; transform: translate(-50%, -50%); background: transparent !important; border: none !important; }
+#delorean { width: 100%; height: 100%; background: url('joueur.png') no-repeat center/contain !important; background-color: transparent !important; filter: drop-shadow(0 8px 6px rgba(0,0,0,0.6)); }
             position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%) scale(0);
             background: rgba(0, 0, 0, 0.95); border: 4px solid #00bfff; border-radius: 20px;
             color: #fff; padding: 40px; text-align: center; z-index: 9999; pointer-events: none;
@@ -153,3 +152,4 @@ function afficherPopup(indexPiste) {
 
 </body>
 </html>
+
