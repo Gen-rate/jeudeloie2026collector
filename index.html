@@ -1,9 +1,9 @@
 <script>
 /* --- 1. ZONE DE COLLAGE DU CHÂTEAU --- */
-const imageChateauBase64 = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAZAAAAAZ... (laisse ton code ici)";
+const imageChateauBase64 = "LAISSE_TON_CODE_EXISTANT_ICI";
 
 /* --- 2. ZONE DE COLLAGE DU FOND --- */
-const imageFondBase64 = "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/4QBoRXhpZ... (laisse ton code ici)";
+const imageFondBase64 = "LAISSE_TON_CODE_EXISTANT_ICI";
 </script>
 
 <!DOCTYPE html>
@@ -11,116 +11,47 @@ const imageFondBase64 = "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/4QBo
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta charset="UTF-8">
-    <title>Gen-rate : Archive Master Gold</title>
     <style>
         body { margin: 0; padding: 0; overflow: hidden; background: #000; }
         #game-container { position: relative; width: 100vw; height: 100vh; background: #222; overflow: hidden; }
         #background-layer { position: absolute; width: 100%; height: 100%; background-size: cover; background-position: center; z-index: 1; }
         #chateau-layer { position: absolute; width: 100%; height: 100%; background-size: contain; background-repeat: no-repeat; background-position: center; z-index: 2; pointer-events: none; }
         #path-svg { position: absolute; width: 100%; height: 100%; z-index: 3; pointer-events: none; }
-        .tile { position: absolute; width: 44px; height: 32px; border: 1px solid rgba(0,0,0,0.2); border-radius: 4px; display: flex; justify-content: center; align-items: center; font-size: 10px; transform-origin: center; z-index: 10; box-shadow: 0 1px 1px rgba(0,0,0,0.3); }
-
+        
         #delorean-container { position: absolute; z-index: 500; transition: all 0.35s linear; width: 100px; height: 50px; transform: translate(-50%, -50%); background: transparent !important; border: none !important; }
         #delorean { width: 100%; height: 100%; background: url('joueur.png') no-repeat center/contain !important; background-color: transparent !important; filter: drop-shadow(0 8px 6px rgba(0,0,0,0.6)); }
+
+        .tile { position: absolute; width: 44px; height: 32px; border: 1px solid rgba(0,0,0,0.2); border-radius: 4px; display: flex; justify-content: center; align-items: center; font-size: 10px; transform-origin: center; z-index: 10; }
+    </style>
+</head>
 <body>
-    <img src="#" id="carte-fond">
-    <div id="second-chateau"></div>
-    <div id="big-announcement"><h1>NOM DE ZEUS !</h1><p style="font-size: 18px;">Tu viens d'atteindre la case</p><div id="big-num" style="font-size: 100px; font-weight: bold; color: #00bfff;">1</div></div>
-    <div id="game-world"><div id="path-layer"></div><div id="delorean-container"><div id="delorean"></div></div></div>
-    <div id="ui-group"><div id="lancers-txt">Lancers : <span id="nb">10</span></div><div id="die" onclick="jouer()">🎲</div></div>
+    <div id="game-container">
+        <div id="background-layer"></div>
+        <div id="chateau-layer"></div>
+        <svg id="path-svg"></svg>
+        <div id="delorean-container"><div id="delorean"></div></div>
+    </div>
+
+    <div id="popup-fin-tour" style="display:none; position:fixed; top:50%; left:50%; transform:translate(-50%, -50%); background:rgba(20, 20, 20, 0.95); color:white; padding:30px; border:3px solid #8a2be2; border-radius:15px; text-align:center; z-index:9999; box-shadow: 0 0 30px #8a2be2; font-family: sans-serif;">
+        <h2 style="color:#a855f7; margin-top:0;">CHRONOS DRIFT</h2>
+        <p id="popup-message" style="font-size:1.3em;">Analyse en cours...</p>
+        <button onclick="document.getElementById('popup-fin-tour').style.display='none'" style="background:#8a2be2; color:white; border:none; padding:12px 25px; border-radius:10px; cursor:pointer; font-weight:bold; font-size:1.1em;">CONTINUER</button>
+    </div>
 
 <script>
-    document.getElementById('second-chateau').style.backgroundImage = "url(" + imageChateauBase64 + ")";
-    document.getElementById('carte-fond').src = imageFondBase64;
-    const pathLayer = document.getElementById('path-layer'), container = document.getElementById('delorean-container'), bigAnnounce = document.getElementById('big-announcement'), bigNum = document.getElementById('big-num'), displayLancers = document.getElementById('nb');
-    const colorMap = ['#ff0000','#ffff00','#8f00ff','#90ee90','#000000','#ffb7d5','#555555','#ffffff','#40e0d0','#ffa500'];
-    const pts = [{ x: 10, y: 92 }, { x: 5, y: 45 }, { x: 15, y: 5 }, { x: 40, y: 3 }, { x: 75, y: 6 }, { x: 92, y: 15 }, { x: 78, y: 30 }, { x: 60, y: 22 }, { x: 30, y: 50 }, { x: 15, y: 75 }, { x: 45, y: 96 }, { x: 75, y: 85 }, { x: 92, y: 92 }];
-    let fullPath = [], pos = 0, lancers = 10, isMoving = false;
-    function interpolate(t, p0, p1, p2, p3) { return 0.5 * ((2 * p1) + (-p0 + p2) * t + (2 * p0 - 5 * p1 + 4 * p2 - p3) * t * t + (-p0 + 3 * p1 - 3 * p2 + p3) * t * t * t); }
-    function initPlateau() {
-        const total = 600, w = [pts[0], ...pts, pts[pts.length-1]], steps = Math.floor(total / (w.length - 3));
-        for (let i = 1; i < w.length - 2; i++) for (let j = 0; j < steps; j++) {
-            const t = j / steps, x = interpolate(t, w[i-1].x, w[i].x, w[i+1].x, w[i+2].x), y = interpolate(t, w[i-1].y, w[i].y, w[i+1].y, w[i+2].y);
-            fullPath.push({x, y});
-        }
-        fullPath.forEach((pt, i) => {
-            if (i >= 600) return;
-            const num = i + 1, tile = document.createElement('div'); tile.className = 'tile'; tile.innerText = num;
-            const unit = num % 10; tile.style.backgroundColor = colorMap[unit]; tile.style.color = (unit === 2 || unit === 4 || unit === 6) ? '#fff' : '#000';
-            const next = fullPath[i+1] || pt, angle = Math.atan2(next.y - pt.y, next.x - pt.x), pScale = 0.5 + (pt.y / 100) * 0.9;
-            tile.style.left = pt.x + "%"; tile.style.top = pt.y + "%";
-            tile.style.transform = `translate(-50%, -50%) rotateX(75deg) rotateZ(${angle}rad) scale(${pScale})`;
-            pathLayer.appendChild(tile);
-        });
-        updatePion();
+// Le moteur du jeu et le capteur
+function moteurJeu() {
+    // ... code du jeu ...
+    if (Math.abs(car.index - destination) < 15) {
+        afficherPopup(car.index);
     }
-    function updatePion() { const pt = fullPath[pos], pScale = 0.6 + (pt.y / 100) * 0.9; container.style.left = pt.x + "%"; container.style.top = pt.y + "%"; container.style.transform = `translate(-50%, -50%) scale(${pScale})`; }
-    function jouer() { if (isMoving || lancers <= 0) return; lancers--; displayLancers.innerText = lancers; const score = Math.floor(Math.random() * 6) + 1; document.getElementById('die').innerText = score; isMoving = true; container.classList.add('moving'); avancer(score); }
-    function avancer(nb) { let fait = 0; const anim = setInterval(() => { if (fait < nb && pos < fullPath.length - 1) { pos++; updatePion(); fait++; } else { clearInterval(anim); isMoving = false; container.classList.remove('moving'); showSplash(); } }, 300); }
-    function showSplash() { bigNum.innerText = pos + 1; bigAnnounce.classList.add('show'); setTimeout(() => { bigAnnounce.classList.remove('show'); }, 3000); }
-    window.onload = initPlateau;
-// --- RÉPARATION BRUTALE ET FINALE ---
-function moteurJeuDeLOie() {
-    // 1. On récupère le chiffre du dé (le 2, 3, 4 ou 5 dans la case blanche)
-    let blocDe = document.querySelector('div[style*="background: white"] b') || 
-                 document.querySelector('.lancer-count') || 
-                 {innerText: "0"};
-    let valeurDe = parseInt(blocDe.innerText);
-
-    // 2. On cible les voitures (cars) du script de Cedric Roca
-    if (typeof cars !== 'undefined' && cars.length > 0) {
-        cars.forEach(car => {
-            // FORCE la vie : la DeLorean ne peut plus "mourir" sur l'herbe
-            car.dead = false;
-            car.vitesse = 5; 
-
-           // Calcule la position sur la piste
-        let destination = valeurDe * 150;
-
-        // Déplacement fluide vers la case
-        if (car.index < destination) {
-            car.index += car.vitesse;
-        } else if (car.index > destination + 10) {
-            car.index -= car.vitesse;
-        }
-
-        // CAPTEUR : On affiche le message quand la voiture s'arrête
-        if (Math.abs(car.index - destination) < 15 && document.getElementById('popup-fin-tour').style.display === 'none') {
-            afficherPopup(car.index);
-        }
-
-        // Aligne physiquement le pion sur le tracé
-        if (typeof points !== 'undefined' && points[Math.floor(car.index)]) {
-            let p = points[Math.floor(car.index)];
-            car.x = p.x;
-            car.y = p.y;
-        }
-    });
 }
-requestAnimationFrame(moteurJeuDeLoie);
-}
-moteurJeuDeLoie();
-</script>
 
-<div id="popup-fin-tour" style="display:none; position:fixed; top:50%; left:50%; transform:translate(-50%, -50%); background:rgba(20, 20, 20, 0.95); color:white; padding:30px; border:3px solid #8a2be2; border-radius:15px; text-align:center; z-index:9999; box-shadow: 0 0 30px #8a2be2; font-family: sans-serif;">
-    <h2 style="color:#a855f7; margin-top:0;">CHRONOS DRIFT</h2>
-    <p id="popup-message" style="font-size:1.3em;">Analyse en cours...</p>
-    <button onclick="document.getElementById('popup-fin-tour').style.display='none'" style="background:#8a2be2; color:white; border:none; padding:12px 25px; border-radius:10px; cursor:pointer; font-weight:bold; font-size:1.1em;">CONTINUER LA COURSE</button>
-</div>
-
-<script>
 function afficherPopup(indexPiste) {
     const caseNumero = Math.floor(indexPiste / 150) + 1;
     document.getElementById('popup-message').innerText = "Nom d'un bolide, tu es maintenant sur la case " + caseNumero;
     document.getElementById('popup-fin-tour').style.display = 'block';
 }
 </script>
-  </body>
-</html><
-
 </body>
 </html>
-
-
-
-
