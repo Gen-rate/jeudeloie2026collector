@@ -32,7 +32,7 @@ HTML
             box-shadow: 0 1px 1px rgba(0,0,0,0.3);
         }
         #delorean-container { position: absolute; z-index: 500; transition: all 0.35s linear; width: 100px; height: 50px; transform: translate(-50%, -50%); }
-        #delorean { width: 100%; height: 100%; background: url('delorean.png') no-repeat center/contain; filter: drop-shadow(0 8px 6px rgba(0,0,0,0.6)); }
+        #delorean { width: 100%; height: 100%; background: url('joueur.png') no-repeat center/contain; filter: drop-shadow(0 8px 6px rgba(0,0,0,0.6)); }
         #big-announcement {
             position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%) scale(0);
             background: rgba(0, 0, 0, 0.95); border: 4px solid #00bfff; border-radius: 20px;
@@ -107,28 +107,49 @@ function moteurJeuDeLOie() {
             car.dead = false;
             car.vitesse = 5; 
 
-            // Calcule la position sur la piste (150 points par unité de dé)
-            let destination = valeurDe * 150;
+           // Calcule la position sur la piste
+        let destination = valeurDe * 150;
 
-            // Déplacement fluide vers la case
-            if (car.index < destination) {
-                car.index += car.vitesse;
-            } else if (car.index > destination + 10) {
-                // Permet de reculer si le dé baisse (optionnel)
-                car.index -= car.vitesse;
-            }
+        // Déplacement fluide vers la case
+        if (car.index < destination) {
+            car.index += car.vitesse;
+        } else if (car.index > destination + 10) {
+            car.index -= car.vitesse;
+        }
 
-            // Aligne physiquement la DeLorean sur le tracé multicolore
-            if (typeof points !== 'undefined' && points[Math.floor(car.index)]) {
-                let p = points[Math.floor(car.index)];
-                car.x = p.x;
-                car.y = p.y;
-            }
-        });
-    }
-    requestAnimationFrame(moteurJeuDeLOie);
+        // CAPTEUR : On affiche le message quand la voiture s'arrête
+        if (Math.abs(car.index - destination) < 15 && document.getElementById('popup-fin-tour').style.display === 'none') {
+            afficherPopup(car.index);
+        }
+
+        // Aligne physiquement le pion sur le tracé
+        if (typeof points !== 'undefined' && points[Math.floor(car.index)]) {
+            let p = points[Math.floor(car.index)];
+            car.x = p.x;
+            car.y = p.y;
+        }
+    });
 }
+requestAnimationFrame(moteurJeuDeLoie);
+}
+moteurJeuDeLoie();
+</script>
 
-// Lancement immédiat de la réparation
+<div id="popup-fin-tour" style="display:none; position:fixed; top:50%; left:50%; transform:translate(-50%, -50%); background:rgba(20, 20, 20, 0.95); color:white; padding:30px; border:3px solid #8a2be2; border-radius:15px; text-align:center; z-index:9999; box-shadow: 0 0 30px #8a2be2; font-family: sans-serif;">
+    <h2 style="color:#a855f7; margin-top:0;">CHRONOS DRIFT</h2>
+    <p id="popup-message" style="font-size:1.3em;">Analyse en cours...</p>
+    <button onclick="document.getElementById('popup-fin-tour').style.display='none'" style="background:#8a2be2; color:white; border:none; padding:12px 25px; border-radius:10px; cursor:pointer; font-weight:bold; font-size:1.1em;">CONTINUER LA COURSE</button>
+</div>
 
-moteurJeuDeLOie();</script>
+<script>
+function afficherPopup(indexPiste) {
+    const caseNumero = Math.floor(indexPiste / 150) + 1;
+    document.getElementById('popup-message').innerText = "Nom d'un bolide, tu es maintenant sur la case " + caseNumero;
+    document.getElementById('popup-fin-tour').style.display = 'block';
+}
+</script>
+  </body>
+</html><
+
+</body>
+</html>
