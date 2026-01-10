@@ -1,9 +1,9 @@
 <script>
 /* --- 1. ZONE DE COLLAGE DU CHÂTEAU --- */
-const imageChateauBase64 = "Mettez_Ici_Votre_Code_Chateau";
+const imageChateauBase64 = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAZAAAAAZ... (laisse ton code ici)";
 
 /* --- 2. ZONE DE COLLAGE DU FOND --- */
-const imageFondBase64 = "Mettez_Ici_Votre_Code_Fond";
+const imageFondBase64 = "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/4QBoRXhpZ... (laisse ton code ici)";
 </script>
 
 <!DOCTYPE html>
@@ -22,22 +22,6 @@ const imageFondBase64 = "Mettez_Ici_Votre_Code_Fond";
 
         #delorean-container { position: absolute; z-index: 500; transition: all 0.35s linear; width: 100px; height: 50px; transform: translate(-50%, -50%); background: transparent !important; border: none !important; }
         #delorean { width: 100%; height: 100%; background: url('joueur.png') no-repeat center/contain !important; background-color: transparent !important; filter: drop-shadow(0 8px 6px rgba(0,0,0,0.6)); }
-        #big-announcement.show { transform: translate(-50%, -50%) scale(1); opacity: 1; }
-        #big-announcement h1 { font-size: 50px; color: #ff9d00; margin-bottom: 10px; text-shadow: 3px 3px #000; }
-        .moving #delorean { animation: flux-fx 0.1s infinite; }
-        @keyframes flux-fx { 0% { filter: brightness(1.3) drop-shadow(0 0 10px #00bfff); } 50% { filter: brightness(2.8) drop-shadow(0 0 35px #00bfff); } 100% { filter: brightness(1); } }
-        #ui-group { position: absolute; bottom: 30px; right: 30px; display: flex; flex-direction: column; align-items: center; z-index: 1000; }
-        #lancers-txt { background: #e67e22; color: white; padding: 10px 20px; border-radius: 10px; border: 2px solid #fff; margin-bottom: 12px; font-weight: bold; }
-        #die { width: 75px; height: 75px; background: #fff; border-radius: 15px; border: 4px solid #333; display: flex; justify-content: center; align-items: center; color: #333; font-size: 32px; font-weight: bold; cursor: pointer; }
-   CSS
-
-@media (max-width: 1024px) {
-    #game-viewport, #game-container {
-        transform: scale(0.4); /* Réduit la taille pour mobile */
-        transform-origin: top left;
-    }
-} </style>
-</head>
 <body>
     <img src="#" id="carte-fond">
     <div id="second-chateau"></div>
@@ -136,6 +120,7 @@ function afficherPopup(indexPiste) {
 
 </body>
 </html>
+
 
 
 
